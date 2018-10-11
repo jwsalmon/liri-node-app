@@ -20,19 +20,19 @@ var query = process.argv[3];
 // Functions for 3 main functions of the app
 // 	--> do-what-it-says requires the use of functions
 var concertThis = function (artistQuery) {
-    if (artistQuery === undefined){
+    if (artistQuery === undefined) {
         artistQuery = "Paul McCartney";
     }
     request("https://rest.bandsintown.com/artists/" + artistQuery + "/events?app_id=codingbootcamp", function (error, response, body) {
         //console.log(response);
         //console.log(body);
-        if (!error&& response.statusCode === 200) {
+        if (!error && response.statusCode === 200) {
 
             for (var i = 0; i < body.length; i++)
-                console.log("Venue Name: ",body[i].venue.name);
-                console.log( "Venue Location: ", body[i].venue.city,",",body[i].venue.country);
-                console.log( "Date of Event: ",  moment(body[i].datetime,"MM/DD/YYYY"));
-            
+                console.log("Venue Name: ", body[i].venue.name);
+            console.log("Venue Location: ", body[i].venue.city, ",", body[i].venue.country);
+            console.log("Date of Event: ", moment(body[i].datetime, "MM/DD/YYYY"));
+
             //* Date of the Event (use moment to format this as "MM/DD/YYYY")
             //moment(body[i].datetime,"MM/DD/YYYY")
         }
@@ -91,7 +91,7 @@ var movieThis = function (movieQuery) {
             // 	--> and if there is, it will print it
             for (var i = 0; i < JSON.parse(body).Ratings.length; i++) {
                 if (JSON.parse(body).Ratings[i].Source === "Rotten Tomatoes") {
-                    console.log("* Rotten Tomatoes Rating:     ",JSON.parse(body).Ratings[i].Value);
+                    console.log("* Rotten Tomatoes Rating:     ", JSON.parse(body).Ratings[i].Value);
                     if (JSON.parse(body).Ratings[i].Website !== undefined) {
                         console.log("* Rotten Tomatoes URL:        ", JSON.parse(body).Ratings[i].Website);
                     }
@@ -101,48 +101,46 @@ var movieThis = function (movieQuery) {
     });
 }
 
-// App functionality due to user input
-switch (command){
+// Determine what to do base on user input command
+switch (command) {
     case "concert-this":
-    concertThis(query);
-    break;
+        concertThis(query);
+        break;
     case "spotify-this-song":
-    spotifyThisSong(query);
-    break;
+        spotifyThisSong(query);
+        break;
     case "movie-this":
-    movieThis(query);
-    break;
+        movieThis(query);
+        break;
     case "do-what-it-says":
-    fs.readFile("random.txt", "utf-8", function (error, data) {
-        var command;
-        var query;
+        fs.readFile("random.txt", "utf-8", function (error, data) {
+            var command;
+            var query;
 
-        // If there is a comma, then we will split the string from file in order to differentiate between the command and query
-        // 	--> if there is no comma, then only the command is considered (my-tweets)
-        if (data.indexOf(",") !== -1) {
-            var dataArr = data.split(",");
-            command = dataArr[0];
-            query = dataArr[1];
-        } else {
-            command = data;
-        }
+            if (data.indexOf(",") !== -1) {
+                var dataArr = data.split(",");
+                command = dataArr[0];
+                query = dataArr[1];
+            } else {
+                command = data;
+            }
 
-        // After reading the command from the file, decides which app function to run
-        switch (command)  {
-            case "concert-this":
-            concertThis(query);
-            break;
-        case "spotify-this-song":
-            spotifyThisSong(query);
-            break;
-        case "movie-this":
-            movieThis(query);
-            break;
-        default:// Use case where the command is not recognized
-            console.log("Command from file is not a valid command! Please try again.")
-        }
-    });
-    break;
+            // After reading the command from the file, decides which app function to run
+            switch (command) {
+                case "concert-this":
+                    concertThis(query);
+                    break;
+                case "spotify-this-song":
+                    spotifyThisSong(query);
+                    break;
+                case "movie-this":
+                    movieThis(query);
+                    break;
+                default:// Use case where the command is not recognized
+                    console.log("Command from file is not a valid command! Please try again.")
+            }
+        });
+        break;
     default:
-    console.log("Please enter a command to run LIRI.");
+        console.log("Please enter a command to run LIRI.");
 }
