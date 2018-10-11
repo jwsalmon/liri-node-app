@@ -27,11 +27,13 @@ var concertThis = function (artistQuery) {
         //console.log(response);
         //console.log(body);
         if (!error && response.statusCode === 200) {
-
-            for (var i = 0; i < body.length; i++)
-                console.log("Venue Name: ", body[i].venue.name);
-            console.log("Venue Location: ", body[i].venue.city, ",", body[i].venue.country);
-            console.log("Date of Event: ", moment(body[i].datetime, "MM/DD/YYYY"));
+            var concertData = JSON.parse(body);
+            var item1 = concertData[0];
+            console.log(item1);
+            for (var i = 0; i < concertData.length; i++)
+            console.log("Venue Name: ", concertData[i].venue.name);
+            console.log("Venue Location: ", concertData[i].venue.city, ",", concertData[i].venue.country);
+            console.log("Date of Event: ", moment(concertData[i].datetime, "MM/DD/YYYY"));
 
             //* Date of the Event (use moment to format this as "MM/DD/YYYY")
             //moment(body[i].datetime,"MM/DD/YYYY")
@@ -77,15 +79,18 @@ var movieThis = function (movieQuery) {
     }
 
     // HTTP GET request
-    request("http://www.omdbapi.com/?t=" + movieQuery + "&y=&plot=short&r=json", function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            console.log("* Title of the movie:         ", JSON.parse(body).Title);
-            console.log("* Year the movie came out:    ", JSON.parse(body).Year);
-            console.log("* IMDB Rating of the movie:   ", JSON.parse(body).imdbRating);
-            console.log("* Country produced:           ", JSON.parse(body).Country);
-            console.log("* Language of the movie:      ", JSON.parse(body).Language);
-            console.log("* Plot of the movie:          ", JSON.parse(body).Plot);
-            console.log("* Actors in the movie:        ", JSON.parse(body).Actors);
+    var queryURL = "https://www.omdbapi.com/?t=" + movieQuery + "&y=&plot=short&apikey=trilogy"
+    request(queryURL, function (error, response, body) {
+        if (!error ) {
+            var movieData = JSON.parse(body);
+            //console.log(movieData);
+            console.log("* Title of the movie:         ", movieData.Title);
+            console.log("* Year the movie came out:    ", movieData.Year);
+            console.log("* IMDB Rating of the movie:   ", movieData.imdbRating);
+            console.log("* Country produced:           ", movieData.Country);
+            console.log("* Language of the movie:      ", movieData.Language);
+            console.log("* Plot of the movie:          ", movieData.Plot);
+            console.log("* Actors in the movie:        ", movieData.Actors);
 
             // For loop parses through Ratings object to see if there is a RT rating
             // 	--> and if there is, it will print it
@@ -98,6 +103,7 @@ var movieThis = function (movieQuery) {
                 }
             }
         }
+        //console.log(error,response);
     });
 }
 
@@ -110,6 +116,7 @@ switch (command) {
         spotifyThisSong(query);
         break;
     case "movie-this":
+        console.log("looking for movie:",query)
         movieThis(query);
         break;
     case "do-what-it-says":
