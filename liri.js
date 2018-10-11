@@ -4,7 +4,7 @@ require("dotenv").config();
 // Load exports from keys.js file which has Twitter auth keys
 var keys = require("./keys.js");
 // Load Spotify npm package
-var Spotify = require('spotify');
+var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 // Load request npm module
 var request = require("request");
@@ -15,7 +15,7 @@ var fs = require("fs");
 
 // node liri.js [ command ] [ query - optional ]
 var command = process.argv[2];
-var query = process.argv[3];
+var query = process.argv.slice(3).join(" ");
 
 // Functions for 3 main functions of the app
 // 	--> do-what-it-says requires the use of functions
