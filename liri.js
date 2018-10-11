@@ -28,13 +28,13 @@ var concertThis = function (artistQuery) {
         //console.log(body);
         if (!error && response.statusCode === 200) {
             var concertData = JSON.parse(body);
-            var item1 = concertData[0];
-            console.log(item1);
-            for (var i = 0; i < concertData.length; i++)
+            //var item1 = concertData[0];
+            //console.log(item1);
+            for (var i = 0; i < concertData.length; i++){
             console.log("Venue Name: ", concertData[i].venue.name);
             console.log("Venue Location: ", concertData[i].venue.city, ",", concertData[i].venue.country);
             console.log("Date of Event: ", moment(concertData[i].datetime, "MM/DD/YYYY"));
-
+            }
             //* Date of the Event (use moment to format this as "MM/DD/YYYY")
             //moment(body[i].datetime,"MM/DD/YYYY")
         }
